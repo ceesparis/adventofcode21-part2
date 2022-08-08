@@ -1,6 +1,6 @@
 # Advent of Code 2021 part II
 
-Here I am continuing where I left of in my other repository, continuing to solve AOC 2021 in Java. 
+Here I am continuing where I left of in my other repository, continuing to solve AOC 2021 in Java 17. 
 
 |  Day  | Stars  | New insights |
 |---|--------|--------------|
