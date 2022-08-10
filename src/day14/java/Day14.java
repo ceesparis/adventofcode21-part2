@@ -7,15 +7,13 @@ import java.util.*;
 public class Day14 {
     public static void main(String[] args) throws FileNotFoundException {
 
-        File file = new File("src/day14/resources/test.txt");
+        File file = new File("src/day14/resources/day14.txt");
         Scanner scan = new Scanner(file);
 
         // make variables
-        StringBuilder polyTemplate = new StringBuilder();
         HashMap<String, String> pIRules = new HashMap<>();
         HashMap<String, Long> pairCount = new HashMap<>();
         String polyString = scan.nextLine();
-        polyTemplate.append(polyString);
         scan.nextLine();
         while(scan.hasNextLine()){
             String[] rule = scan.nextLine().split(" -> ");
@@ -25,27 +23,25 @@ public class Day14 {
         for(int i = 0; i<polyString.length()-1; i++){
             String curPair = polyString.substring(i, i+2);
             if(pairCount.containsKey(curPair)){
-                pairCount.replace(curPair, pairCount.get(curPair)+1);
+                pairCount.replace(curPair, pairCount.get(curPair)+1L);
             } else pairCount.put(curPair, 1L);
         }
 
-        // part one
-        // grow polymer
-//        for(int i = 0; i<10; i++){
-//            polyTemplate = pairInsertion(polyTemplate, pIRules);
-//        }
-//        // get hashmap with count of each element
-//        HashMap<Character, Integer> countMap = findQuantities(polyTemplate);
-//
-//        // get result
-//        long result = getResult(countMap);
-//        System.out.println(result);
+        Character firstChar = polyString.charAt(0);
+        Character lastChar = polyString.charAt(polyString.length()-1);
 
-        // part two
-//        for(int i = 0; i<10; i++){
-//            pairCount =
-//        }
-        for(int i = 0; i<40; i++){
+        //part 1
+
+        for(int i = 0; i<10; i++){
+            pairCount = pairInsertionMap(pairCount, pIRules);
+        }
+
+        HashMap<String, Integer> singleLetterMapPart1 = countPairMap(pairCount);
+        long result1 = getResult(singleLetterMapPart1);
+        System.out.println(result1);
+
+        // part 2
+        for(int i = 0; i<30; i++){
             pairCount = pairInsertionMap(pairCount, pIRules);
         }
 
@@ -88,7 +84,7 @@ public class Day14 {
     public static long getResult(HashMap countMap){
         Long max = (Long) Collections.max(countMap.entrySet(), Map.Entry.comparingByValue()).getValue();
         Long min = (Long) Collections.min(countMap.entrySet(), Map.Entry.comparingByValue()).getValue();
-        return max/2 - min/2;
+        return max-min;
     }
 
     public static HashMap<String, Long> pairInsertionMap(HashMap countMap, HashMap pIRules){
@@ -98,9 +94,6 @@ public class Day14 {
             Map.Entry<String, Long> pair = it.next();
             String currentPair = pair.getKey();
             Long currentQuantity = pair.getValue();
-            if (currentQuantity < 0){
-                currentQuantity = currentQuantity * -1;
-            }
             if(!pIRules.containsKey(currentPair)) continue;
             String inBetween =String.valueOf(pIRules.get(currentPair));
             String newCombo1 = String.valueOf(currentPair.charAt(0)) + inBetween;
@@ -126,8 +119,8 @@ public class Day14 {
             Map.Entry<String, Long> pair = it.next();
             String currentPair = pair.getKey();
             Long currentQuantity = pair.getValue();
-            addNewPairToCountMap(singleLetterMap, currentPair.substring(0, 1), currentQuantity);
-            addNewPairToCountMap(singleLetterMap, currentPair.substring(1), currentQuantity);
+            addNewPairToCountMap(singleLetterMap, currentPair.substring(0, 1), currentQuantity/2);
+            addNewPairToCountMap(singleLetterMap, currentPair.substring(1), currentQuantity/2);
         }
         return singleLetterMap;
     }
